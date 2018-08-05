@@ -11,3 +11,7 @@
   position: relative;
   margin-bottom: 35px;
 }
+
+.add-button {
+  font-size: 3rem !important;
+}
