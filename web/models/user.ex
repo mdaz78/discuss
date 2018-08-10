@@ -1,4 +1,5 @@
 defmodule Discuss.User do
+  @moduledoc false
   use Discuss.Web, :model
 
   schema "users" do
