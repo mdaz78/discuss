@@ -14,7 +14,7 @@ defmodule Discuss.Plugs.SetUser do
   def call(conn, _params) do
     user_id = get_session(conn, :user_id)
     cond do
-      user = user.id && Repo.get(User, user_id) ->
+      user = user_id && Repo.get(User, user_id) ->
         assign(conn, :user, user) 
         # after this step conn.assigns.user will give us the user construct
 
