@@ -1,4 +1,9 @@
 defmodule Discuss.Plugs.RequireAuth do
+  @moduledoc """
+  Module plug to authorize user to perform specific
+  tasks
+  """
+  
   # imports
   import Phoenix.Controller
   import Plug.Conn
