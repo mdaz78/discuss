@@ -66,7 +66,7 @@ const createSocket = (topicId) => {
   channel
     .join()
     .receive("ok", resp => {
-      renderComments(resp.comments)
+      renderComments(resp)
     })
     .receive("error", resp => {
       console.log("Unable to join", resp)
@@ -83,7 +83,8 @@ const createSocket = (topicId) => {
   })
 }
 
-function renderComments(comments) {
+function renderComments(resp) {
+  let comments = resp.comments
   let renderedComments = comments.map(comment => {
     return commentTemplate(comment)
   });
@@ -98,9 +99,13 @@ function renderComment(event) {
 }
 
 function commentTemplate(comment) {
+  console.log(comment.user);
   return `
     <li class="collection-item">
       ${comment.content}
+      <div class="right">
+        ${comment.user == null ? "" : comment.user.email}
+      </div>
     </li>
   `
 }
