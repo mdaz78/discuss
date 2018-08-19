@@ -102,8 +102,8 @@ function commentTemplate(comment) {
   return `
     <li class="collection-item">
       ${comment.content}
-      <div class="right">
-        ${comment.user == null ? "" : comment.user.email}
+      <div class="secondary-content">
+        ${comment.user == null ? "Anonymous" : comment.user.email}
       </div>
     </li>
   `
