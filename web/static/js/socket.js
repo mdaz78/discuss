@@ -99,7 +99,6 @@ function renderComment(event) {
 }
 
 function commentTemplate(comment) {
-  console.log(comment.user);
   return `
     <li class="collection-item">
       ${comment.content}
