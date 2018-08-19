@@ -9,7 +9,7 @@ defmodule Discuss.TopicController do
   plug :check_topic_owner when action in[:edit, :update, :delete]
 
   def show(conn, %{"id" => topic_id}) do
-    topic = Repo.get(Topic, topic_id)
+    topic = Repo.get!(Topic, topic_id)
     render conn, "show.html", topic: topic
   end
 
@@ -31,12 +31,12 @@ defmodule Discuss.TopicController do
       |> Topic.changeset(topic)
 
     case Repo.insert(changeset) do
-      {:ok, _topic} -> 
-        conn 
+      {:ok, _topic} ->
+        conn
         |> put_flash(:info, "Topic Created")
         |> redirect(to: topic_path(conn, :index))
 
-      {:error, changeset} -> 
+      {:error, changeset} ->
         render conn, "new.html", changeset: changeset
     end
   end
@@ -53,7 +53,7 @@ defmodule Discuss.TopicController do
 
     case Repo.update(changeset) do
       {:ok, _topic} ->
-        conn 
+        conn
         |> put_flash(:info, "Topic Updated")
         |> redirect(to: topic_path(conn, :index))
 
@@ -65,7 +65,7 @@ defmodule Discuss.TopicController do
   def delete(conn, %{"id" => topic_id}) do
     Repo.get!(Topic, topic_id) |> Repo.delete!
 
-    conn 
+    conn
     |> put_flash(:info, "Topic Deleted Successfully")
     |> redirect(to: topic_path(conn, :index))
   end
