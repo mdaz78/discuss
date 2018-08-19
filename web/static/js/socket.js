@@ -99,12 +99,11 @@ function renderComment(event) {
 }
 
 function commentTemplate(comment) {
-  console.log(comment.user);
   return `
     <li class="collection-item">
       ${comment.content}
-      <div class="right">
-        ${comment.user == null ? "" : comment.user.email}
+      <div class="secondary-content">
+        ${comment.user == null ? "Anonymous" : comment.user.email}
       </div>
     </li>
   `
