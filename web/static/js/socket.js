@@ -3,9 +3,15 @@
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/my_app/endpoint.ex":
-import {Socket} from "phoenix"
+import {
+  Socket
+} from "phoenix"
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/socket", {
+  params: {
+    token: window.userToken
+  }
+})
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -55,9 +61,53 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+const createSocket = (topicId) => {
+  let channel = socket.channel(`comments:${topicId}`, {})
+  channel
+    .join()
+    .receive("ok", resp => {
+      renderComments(resp)
+    })
+    .receive("error", resp => {
+      console.log("Unable to join", resp)
+    })
 
-export default socket
+  channel.on(`comments:${topicId}:new`, renderComment)
+
+  document.getElementById("add-comment").addEventListener("click", function () {
+    const content = document.getElementById("comment").value;
+    // send that content to channel
+    channel.push("comments:add", {
+      content: content
+    });
+  })
+}
+
+function renderComments(resp) {
+  let comments = resp.comments
+  let renderedComments = comments.map(comment => {
+    return commentTemplate(comment)
+  });
+  document.querySelector(".collection").innerHTML = renderedComments.join('');
+}
+
+function renderComment(event) {
+  // since comment in this context is an event object 
+  // so we need to do event.comment
+  const renderedComment = commentTemplate(event.comment)
+  document.querySelector(".collection").innerHTML += renderedComment
+}
+
+function commentTemplate(comment) {
+  return `
+    <li class="collection-item">
+      ${comment.content}
+      <div class="secondary-content">
+        ${comment.user == null ? "Anonymous" : comment.user.email}
+      </div>
+    </li>
+  `
+}
+
+// export default socket
+window.createSocket = createSocket;

@@ -16,6 +16,12 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+
+    <script>
+      <%= if @conn.assigns.user do %>
+        window.userToken = "<%= Phoenix.Token.sign(Discuss.Endpoint, "key", @conn.assigns.user.id) %>"
+      <% end %>
+    </script>
   </head>
 
   <body>
